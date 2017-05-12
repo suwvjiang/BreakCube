@@ -81,11 +81,14 @@ public class BaseCube : MonoBehaviour
 
     Vector2[] GetUVS(float originX, float originY)
     {
+        originX %= 3;
+        originY %= 4;
+        
         Vector2[] uvs = new Vector2[4];
-        uvs[0] = new Vector2(originX / 3.0f, originY / 3.0f);
-        uvs[1] = new Vector2((originX + 1) / 3.0f, originY / 3.0f);
-        uvs[2] = new Vector2(originX / 3.0f, (originY + 1) / 3.0f);
-        uvs[3] = new Vector2((originX + 1) / 3.0f, (originY + 1) / 3.0f);
+        uvs[0] = new Vector2(originX / 3.0f, originY / 4.0f);
+        uvs[1] = new Vector2((originX + 1) / 3.0f, originY / 4.0f);
+        uvs[2] = new Vector2(originX / 3.0f, (originY + 1) / 4.0f);
+        uvs[3] = new Vector2((originX + 1) / 3.0f, (originY + 1) / 4.0f);
         return uvs;
     }
 
