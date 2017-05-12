@@ -2,78 +2,142 @@
 using System.Collections;
 
 /// <summary>
-/// 方块基类
-/// design by: 江楚飞
+/// BaseCube
+/// design by:jiangchufei@gmail.com
 /// date: 2017-5-12
 /// </summary>
 /// 
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 [ExecuteInEditMode]
 public class BaseCube : MonoBehaviour 
 {
-    private Mesh m_mesh;
-
-    void Awake()
+    public enum CubeFaceType
     {
-        m_mesh = GetComponent<MeshFilter>().sharedMesh;
-        Vector2[] uvs = SixTexForCube(m_mesh.vertices);
+        Top,
+        Bottom,
+        Left,
+        Right,
+        Front,
+        Back
+    };
+
+    public Vector2 frontPoint;
+    public Vector2 topPoint;
+    public Vector2 leftPoint;
+
+    private Mesh m_mesh;
+    
+    // Use this for initialization
+    void Start () 
+	{
+        MeshFilter meshFilter = GetComponent<MeshFilter>();
+        if (meshFilter == null) 
+		{
+            Debug.LogError("Script needs MeshFilter component");
+            return;
+        }
+
+#if UNITY_EDITOR
+        Mesh meshCopy = Mesh.Instantiate(meshFilter.sharedMesh) as Mesh;    // Make a deep copy
+        meshCopy.name = "Cube";
+        m_mesh = meshFilter.mesh = meshCopy;                                // Assign the copy to the meshes
+#else
+        m_mesh = meshFilter.mesh;
+#endif
+        if (m_mesh == null || m_mesh.uv.Length != 24) 
+		{
+            Debug.LogError("Script needs to be attached to built-in cube");
+            return;
+        }
+
+        UpdateMeshUVS();
+    }
+
+    // Update is called once per frame
+    void Update () 
+    {
+#if UNITY_EDITOR
+        UpdateMeshUVS();
+#endif
+    }
+
+    void UpdateMeshUVS()
+    {
+        Vector2[] uvs = m_mesh.uv;
+        // Front
+        SetFaceTexture(CubeFaceType.Front, uvs);
+        // Top
+        SetFaceTexture(CubeFaceType.Top, uvs);
+        // Back
+        SetFaceTexture(CubeFaceType.Back, uvs);
+        // Bottom
+        SetFaceTexture(CubeFaceType.Bottom, uvs);
+        // Left
+        SetFaceTexture(CubeFaceType.Left, uvs);  
+        // Right        
+        SetFaceTexture(CubeFaceType.Right, uvs);   
         m_mesh.uv = uvs;
     }
 
-	// Use this for initialization
-	void Start () 
+    Vector2[] GetUVS(float originX, float originY)
     {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () 
+        Vector2[] uvs = new Vector2[4];
+        uvs[0] = new Vector2(originX / 3.0f, originY / 3.0f);
+        uvs[1] = new Vector2((originX + 1) / 3.0f, originY / 3.0f);
+        uvs[2] = new Vector2(originX / 3.0f, (originY + 1) / 3.0f);
+        uvs[3] = new Vector2((originX + 1) / 3.0f, (originY + 1) / 3.0f);
+        return uvs;
+    }
+
+    void SetFaceTexture(CubeFaceType faceType, Vector2[] uvs)
     {
-	
-	}
-
-    Vector2[] SixTexForCube(Vector3[] verticles)  
-    {
-        Vector2[] uv = new Vector2[verticles.Length];  
-
-        float t = 1 / 3f;  
-
-        //front  
-        uv[0] = new Vector2(0, 0); 
-        uv[1] = new Vector2(t, 0);
-        uv[2] = new Vector2(0, t); 
-        uv[3] = new Vector2(t, t);  
-
-        //back  
-        uv[4] = new Vector2(t, t);  
-        uv[5] = new Vector2(0, t); 
-        uv[6] = new Vector2(t, 0);
-        uv[7] = new Vector2(0, 0); 
-
-        //top  
-        uv[8] = new Vector2(0, 0);  
-        uv[9] = new Vector2(t, 0);  
-        uv[10] = new Vector2(0, t);  
-        uv[11] = new Vector2(t, t);  
-
-        //Bottom  
-        uv[12] = new Vector2(t, t);  
-        uv[13] = new Vector2(t, 2 * t);  
-        uv[14] = new Vector2(0, 2 * t);  
-        uv[15] = new Vector2(0, t);  
-
-        //left  
-        uv[16] = new Vector2(2 * t, 0);  
-        uv[17] = new Vector2(2 * t, t);  
-        uv[18] = new Vector2(t, t);  
-        uv[19] = new Vector2(t, 0);  
-
-        //right  
-        uv[20] = new Vector2(1, t);  
-        uv[21] = new Vector2(1, 2 * t);  
-        uv[22] = new Vector2(2 * t, 2 * t);  
-        uv[23] = new Vector2(2 * t, t); 
-        return uv;  
-    }  
+        if (faceType == CubeFaceType.Front) 
+		{
+            Vector2[] newUVS = GetUVS(frontPoint.x, frontPoint.y);
+            uvs[0]  = newUVS[0]; 
+            uvs[1]  = newUVS[1];
+            uvs[2]  = newUVS[2];
+            uvs[3]  = newUVS[3];
+        }
+		else if (faceType == CubeFaceType.Back) 
+		{
+            Vector2[] newUVS = GetUVS(frontPoint.x, frontPoint.y);
+            uvs[6] = newUVS[1]; 
+            uvs[7] = newUVS[0]; 
+            uvs[10]  = newUVS[3]; 
+            uvs[11]  = newUVS[2]; 
+        }
+		else if (faceType == CubeFaceType.Top) 
+		{
+            Vector2[] newUVS = GetUVS(topPoint.x, topPoint.y);
+            uvs[4]  = newUVS[2]; 
+            uvs[5]  = newUVS[3]; 
+            uvs[8] = newUVS[0]; 
+            uvs[9] = newUVS[1]; 
+        }
+		else if (faceType == CubeFaceType.Bottom) 
+		{
+            Vector2[] newUVS = GetUVS(topPoint.x, topPoint.y);
+            uvs[12]  = newUVS[3]; 
+            uvs[13]  = newUVS[1]; 
+            uvs[14] = newUVS[0]; 
+            uvs[15] = newUVS[2]; 
+        }
+		else if (faceType == CubeFaceType.Left) 
+		{
+            Vector2[] newUVS = GetUVS(leftPoint.x, leftPoint.y);
+            uvs[16] = newUVS[0]; 
+            uvs[17]  = newUVS[2]; 
+            uvs[18] = newUVS[3]; 
+            uvs[19]  = newUVS[1]; 
+        }
+		else if (faceType == CubeFaceType.Right) 
+		{
+            Vector2[] newUVS = GetUVS(leftPoint.x, leftPoint.y);
+            uvs[20] = newUVS[0]; 
+            uvs[21]  = newUVS[2]; 
+            uvs[22] = newUVS[3]; 
+            uvs[23]  = newUVS[1]; 
+        }
+    }
 }
