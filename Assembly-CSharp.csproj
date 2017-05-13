@@ -48,7 +48,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\BaseCube.cs" />
+     <Compile Include="Assets\Scripts\Framework\Data\CubeData.cs" />
+     <Compile Include="Assets\Scripts\Framework\GameBase\BaseCube.cs" />
+     <Compile Include="Assets\Scripts\Framework\Manager\CameraMgr.cs" />
+     <Compile Include="Assets\Scripts\Framework\Manager\InputMgr.cs" />
+     <Compile Include="Assets\Scripts\GameEnter.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

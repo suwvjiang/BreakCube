@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// BaseCube
+/// 方块基类
 /// design by:jiangchufei@gmail.com
 /// date: 2017-5-12
 /// </summary>
@@ -11,16 +11,6 @@ using System.Collections;
 [ExecuteInEditMode]
 public class BaseCube : MonoBehaviour 
 {
-    public enum CubeFaceType
-    {
-        Top,
-        Bottom,
-        Left,
-        Right,
-        Front,
-        Back
-    };
-
     public Vector2 FrontPoint;
     public Vector2 BackPoint;
     public Vector2 TopPoint;
@@ -29,7 +19,24 @@ public class BaseCube : MonoBehaviour
     public Vector2 RightPoint;
 
     private Mesh m_mesh;
+    private CubeData m_data;
+    private bool m_marked;
+    private Color m_color;
     
+
+    public CubeData Data
+    {
+        get
+        {
+            return m_data;
+        }
+        set
+        {
+            m_data = value;
+            UpdataView();
+        }
+    }
+
     // Use this for initialization
     void Start () 
 	{
@@ -64,7 +71,52 @@ public class BaseCube : MonoBehaviour
 #endif
     }
 
-    void UpdateMeshUVS()
+    public void UpdataView()
+    {
+        FrontPoint.x = m_data.ZCue.Num;
+        FrontPoint.y = (int)m_data.ZCue.Type;
+        BackPoint.x = m_data.ZCue.Num;
+        BackPoint.y = (int)m_data.ZCue.Type;
+
+        TopPoint.x = m_data.YCue.Num;
+        TopPoint.y = (int)m_data.YCue.Type;
+        BottomPoint.x = m_data.YCue.Num;
+        BottomPoint.y = (int)m_data.YCue.Type;
+
+        LeftPoint.x = m_data.XCue.Num;
+        LeftPoint.y = (int)m_data.XCue.Type;
+        RightPoint.x = m_data.XCue.Num;
+        RightPoint.y = (int)m_data.XCue.Type;
+
+        UpdateMeshUVS();
+    }
+
+    public void SetMark(bool boo)
+    {
+        if(m_marked == boo)
+            return;
+        
+        m_marked = boo;
+        if(m_marked)
+        {
+            MarkColor(Color.blue);
+        }
+        else
+        {
+            MarkColor(Color.white);
+        }
+    }
+    ///标记颜色
+    public void MarkColor(Color color)
+    {
+        if(m_color == color)
+            return;
+
+        m_color = color;
+        UpdateColor();
+    }
+
+    protected void UpdateMeshUVS()
     {
         Vector2[] uvs = m_mesh.uv;
         // Front
@@ -82,7 +134,7 @@ public class BaseCube : MonoBehaviour
         m_mesh.uv = uvs;
     }
 
-    Vector2[] GetUVS(float originX, float originY)
+    protected virtual Vector2[] GetUVS(float originX, float originY)
     {
         originX %= 10;
         originY %= 2;
@@ -95,7 +147,7 @@ public class BaseCube : MonoBehaviour
         return uvs;
     }
 
-    void SetFaceTexture(CubeFaceType faceType, Vector2[] uvs)
+    protected void SetFaceTexture(CubeFaceType faceType, Vector2[] uvs)
     {
         if (faceType == CubeFaceType.Front) 
 		{
@@ -145,5 +197,11 @@ public class BaseCube : MonoBehaviour
             uvs[21]  = newUVS[2]; 
             uvs[22] = newUVS[3]; 
         }
+    }
+
+    ///更新颜色
+    protected void UpdateColor()
+    {
+
     }
 }
