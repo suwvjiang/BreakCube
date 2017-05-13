@@ -21,9 +21,12 @@ public class BaseCube : MonoBehaviour
         Back
     };
 
-    public Vector2 frontPoint;
-    public Vector2 topPoint;
-    public Vector2 leftPoint;
+    public Vector2 FrontPoint;
+    public Vector2 BackPoint;
+    public Vector2 TopPoint;
+    public Vector2 BottomPoint;
+    public Vector2 LeftPoint;
+    public Vector2 RightPoint;
 
     private Mesh m_mesh;
     
@@ -81,14 +84,14 @@ public class BaseCube : MonoBehaviour
 
     Vector2[] GetUVS(float originX, float originY)
     {
-        originX %= 3;
-        originY %= 4;
+        originX %= 10;
+        originY %= 2;
         
         Vector2[] uvs = new Vector2[4];
-        uvs[0] = new Vector2(originX / 3.0f, originY / 4.0f);
-        uvs[1] = new Vector2((originX + 1) / 3.0f, originY / 4.0f);
-        uvs[2] = new Vector2(originX / 3.0f, (originY + 1) / 4.0f);
-        uvs[3] = new Vector2((originX + 1) / 3.0f, (originY + 1) / 4.0f);
+        uvs[0] = new Vector2(originX / 10.0f, originY / 2.0f);
+        uvs[1] = new Vector2((originX + 1) / 10.0f, originY / 2.0f);
+        uvs[2] = new Vector2(originX / 10.0f, (originY + 1) / 2.0f);
+        uvs[3] = new Vector2((originX + 1) / 10.0f, (originY + 1) / 2.0f);
         return uvs;
     }
 
@@ -96,7 +99,7 @@ public class BaseCube : MonoBehaviour
     {
         if (faceType == CubeFaceType.Front) 
 		{
-            Vector2[] newUVS = GetUVS(frontPoint.x, frontPoint.y);
+            Vector2[] newUVS = GetUVS(FrontPoint.x, FrontPoint.y);
             uvs[0]  = newUVS[0]; 
             uvs[1]  = newUVS[1];
             uvs[2]  = newUVS[2];
@@ -104,43 +107,43 @@ public class BaseCube : MonoBehaviour
         }
 		else if (faceType == CubeFaceType.Back) 
 		{
-            Vector2[] newUVS = GetUVS(frontPoint.x, frontPoint.y);
-            uvs[6] = newUVS[1]; 
+            Vector2[] newUVS = GetUVS(BackPoint.x, BackPoint.y);
             uvs[7] = newUVS[0]; 
-            uvs[10]  = newUVS[3]; 
+            uvs[6] = newUVS[1]; 
             uvs[11]  = newUVS[2]; 
+            uvs[10]  = newUVS[3]; 
         }
 		else if (faceType == CubeFaceType.Top) 
 		{
-            Vector2[] newUVS = GetUVS(topPoint.x, topPoint.y);
-            uvs[4]  = newUVS[2]; 
-            uvs[5]  = newUVS[3]; 
+            Vector2[] newUVS = GetUVS(TopPoint.x, TopPoint.y);
             uvs[8] = newUVS[0]; 
             uvs[9] = newUVS[1]; 
+            uvs[4]  = newUVS[2]; 
+            uvs[5]  = newUVS[3]; 
         }
 		else if (faceType == CubeFaceType.Bottom) 
 		{
-            Vector2[] newUVS = GetUVS(topPoint.x, topPoint.y);
-            uvs[12]  = newUVS[3]; 
-            uvs[13]  = newUVS[1]; 
-            uvs[14] = newUVS[0]; 
-            uvs[15] = newUVS[2]; 
+            Vector2[] newUVS = GetUVS(BottomPoint.x, BottomPoint.y);
+            uvs[15] = newUVS[1]; 
+            uvs[12]  = newUVS[0]; 
+            uvs[13]  = newUVS[2]; 
+            uvs[14] = newUVS[3]; 
         }
 		else if (faceType == CubeFaceType.Left) 
 		{
-            Vector2[] newUVS = GetUVS(leftPoint.x, leftPoint.y);
+            Vector2[] newUVS = GetUVS(LeftPoint.x, LeftPoint.y);
+            uvs[19]  = newUVS[1]; 
             uvs[16] = newUVS[0]; 
             uvs[17]  = newUVS[2]; 
             uvs[18] = newUVS[3]; 
-            uvs[19]  = newUVS[1]; 
         }
 		else if (faceType == CubeFaceType.Right) 
 		{
-            Vector2[] newUVS = GetUVS(leftPoint.x, leftPoint.y);
+            Vector2[] newUVS = GetUVS(RightPoint.x, RightPoint.y);
+            uvs[23]  = newUVS[1]; 
             uvs[20] = newUVS[0]; 
             uvs[21]  = newUVS[2]; 
             uvs[22] = newUVS[3]; 
-            uvs[23]  = newUVS[1]; 
         }
     }
 }
