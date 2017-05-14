@@ -12,7 +12,8 @@ public class InputMgr : MonoBehaviour
 {
 	public Camera MainCamera;
 
-	private bool m_clickable;
+	private bool m_clickable = true;
+	private InputState m_inputState = InputState.None;
 	// Use this for initialization
 	void Start () 
 	{
@@ -39,8 +40,20 @@ public class InputMgr : MonoBehaviour
 			{
 				//划出射线，只有在scene视图中才能看到
 				Debug.DrawLine(ray.origin,hitInfo.point);
-				BaseCube cube = hitInfo.collider.gameObject.GetComponent<BaseCube>();
+				Cube cube = hitInfo.collider.gameObject.GetComponent<Cube>();
 				Debug.Log("click object name is " + cube.name);
+				if(cube != null)
+				{
+					switch(m_inputState)
+					{
+						case InputState.Mark:
+							cube.Mark();
+							break;
+						case InputState.Break:
+							cube.Break();
+							break;
+					}
+				}
 			}
 		}
 	}

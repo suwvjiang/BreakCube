@@ -1,22 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// 方块信息
+/// 游戏枚举集合
 /// design by:jiangchufei@gmail.com
 /// date: 2017-5-13
 /// </summary>
-/// 
-
-public class CubeData 
-{
-	public int Value;
-	public Vector3 Pos;
-	public CueInfo XCue;
-	public CueInfo YCue;
-	public CueInfo ZCue;
-
-}
+///
 
 ///提示数字类型
 public enum CueNumType
@@ -27,13 +17,7 @@ public enum CueNumType
 	MultBreak,
 }
 
-///提示信息
-public class CueInfo
-{
-	public CueNumType Type;
-	public int Num;
-}
-
+///方块六面
 public enum CubeFaceType
 {
     Top,
@@ -42,4 +26,12 @@ public enum CubeFaceType
     Right,
     Front,
     Back
-};
+}
+
+///当前输入状态
+public enum InputState
+{
+    None,
+    Mark,
+    Break,
+}

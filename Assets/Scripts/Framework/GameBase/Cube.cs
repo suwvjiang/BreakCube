@@ -9,7 +9,7 @@ using System.Collections;
 /// 
 
 [ExecuteInEditMode]
-public class BaseCube : MonoBehaviour 
+public class Cube : MonoBehaviour 
 {
     public Vector2 FrontPoint;
     public Vector2 BackPoint;
@@ -19,21 +19,35 @@ public class BaseCube : MonoBehaviour
     public Vector2 RightPoint;
 
     private Mesh m_mesh;
-    private CubeData m_data;
+    private CubeCueData m_cueData;
+    private CubeModelData m_modelData;
     private bool m_marked;
     private Color m_color;
     
 
-    public CubeData Data
+    public CubeCueData CueData
     {
         get
         {
-            return m_data;
+            return m_cueData;
         }
         set
         {
-            m_data = value;
-            UpdataView();
+            m_cueData = value;
+            UpdataCueView();
+        }
+    }
+
+    public CubeModelData ModelData
+    {
+        get
+        {
+            return m_modelData;
+        }
+        set
+        {
+            m_modelData = value;
+            UpdateModelView();
         }
     }
 
@@ -48,9 +62,11 @@ public class BaseCube : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        Mesh meshCopy = Mesh.Instantiate(meshFilter.sharedMesh) as Mesh;    // Make a deep copy
+        // Make a deep copy
+        Mesh meshCopy = Mesh.Instantiate(meshFilter.sharedMesh) as Mesh;    
         meshCopy.name = "Cube";
-        m_mesh = meshFilter.mesh = meshCopy;                                // Assign the copy to the meshes
+        // Assign the copy to the meshes
+        m_mesh = meshFilter.mesh = meshCopy;                                
 #else
         m_mesh = meshFilter.mesh;
 #endif
@@ -71,32 +87,36 @@ public class BaseCube : MonoBehaviour
 #endif
     }
 
-    public void UpdataView()
+    ///显示提示数据信息
+    public void UpdataCueView()
     {
-        FrontPoint.x = m_data.ZCue.Num;
-        FrontPoint.y = (int)m_data.ZCue.Type;
-        BackPoint.x = m_data.ZCue.Num;
-        BackPoint.y = (int)m_data.ZCue.Type;
+        FrontPoint.x = m_cueData.ZCue.Num;
+        FrontPoint.y = (int)m_cueData.ZCue.Type;
+        BackPoint.x = m_cueData.ZCue.Num;
+        BackPoint.y = (int)m_cueData.ZCue.Type;
 
-        TopPoint.x = m_data.YCue.Num;
-        TopPoint.y = (int)m_data.YCue.Type;
-        BottomPoint.x = m_data.YCue.Num;
-        BottomPoint.y = (int)m_data.YCue.Type;
+        TopPoint.x = m_cueData.YCue.Num;
+        TopPoint.y = (int)m_cueData.YCue.Type;
+        BottomPoint.x = m_cueData.YCue.Num;
+        BottomPoint.y = (int)m_cueData.YCue.Type;
 
-        LeftPoint.x = m_data.XCue.Num;
-        LeftPoint.y = (int)m_data.XCue.Type;
-        RightPoint.x = m_data.XCue.Num;
-        RightPoint.y = (int)m_data.XCue.Type;
+        LeftPoint.x = m_cueData.XCue.Num;
+        LeftPoint.y = (int)m_cueData.XCue.Type;
+        RightPoint.x = m_cueData.XCue.Num;
+        RightPoint.y = (int)m_cueData.XCue.Type;
 
         UpdateMeshUVS();
     }
 
-    public void SetMark(bool boo)
+    ///显示模型数据信息
+    public void UpdateModelView()
     {
-        if(m_marked == boo)
-            return;
-        
-        m_marked = boo;
+        MarkColor(m_modelData.Color);
+    }
+
+    public void Mark()
+    {
+        m_marked = !m_marked;
         if(m_marked)
         {
             MarkColor(Color.blue);
@@ -106,6 +126,7 @@ public class BaseCube : MonoBehaviour
             MarkColor(Color.white);
         }
     }
+
     ///标记颜色
     public void MarkColor(Color color)
     {
@@ -114,6 +135,23 @@ public class BaseCube : MonoBehaviour
 
         m_color = color;
         UpdateColor();
+    }
+
+    public bool Break()
+    {
+        if(m_cueData == null)
+            return false;
+
+        if(m_cueData.Value == 0)
+        {
+            BeBreak();
+            return true;
+        }
+        else
+        {
+            WrongBreak();
+            return false;
+        }
     }
 
     protected void UpdateMeshUVS()
@@ -202,6 +240,18 @@ public class BaseCube : MonoBehaviour
     ///更新颜色
     protected void UpdateColor()
     {
+        Debug.Log("you change this cube's color");
+    }
 
+    ///方块被击碎
+    protected virtual void BeBreak()
+    {
+        GameObject.Destroy(this);
+    }
+
+    ///方块被误击
+    protected virtual void WrongBreak()
+    {
+        Debug.Log("you have mistake");
     }
 }
