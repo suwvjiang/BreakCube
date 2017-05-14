@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// 游戏数据结构集合
@@ -13,18 +14,18 @@ using System.Collections;
 public class CubeCueData 
 {
 	public int Value;
-	public Vector3 Pos;
-	public CueInfo XCue;
-	public CueInfo YCue;
-	public CueInfo ZCue;
+	public Vector3 Pos = Vector3.zero;
+	public FaceCueInfo XCue = new FaceCueInfo();
+	public FaceCueInfo YCue = new FaceCueInfo();
+	public FaceCueInfo ZCue = new FaceCueInfo();
 
 }
 
 ///提示信息
 [SerializeField]
-public class CueInfo
+public class FaceCueInfo
 {
-	public CueNumType Type;
+	public CueNumType Type = CueNumType.None;
 	public int Num;
 }
 
@@ -34,8 +35,8 @@ public class CubeModelData
 {
 	public int ID;
 	public int Index;
-	public Vector3 Pos;
-	public Color Color;
+	public Vector3 Pos = Vector3.zero;
+	public Color Color = Color.white;
 	public int FrontTextureID = -1;
 	public int BackTextureID = -1;
 	public int LeftTextureID = -1;
@@ -54,8 +55,8 @@ public class ModelInfo
 	public int Width;
 	public int Heigth;
 	public int Depth;
-	public CubeModelData[] Cubes;
-	public Vector3 Angle;
+	public List<CubeModelData> Cubes = new List<CubeModelData>();
+	public Vector3 Angle = Vector3.zero;
 }
 
 [SerializeField]
@@ -64,5 +65,9 @@ public class PuzzleInfo
 	public int ID;
 	public int ModelID;
 	public int Level;
-	public CubeCueData[] Cubes;
+	public int BestCost;
+	public int BetterCost;
+	public int GoodCost;
+	public int Tolerant;
+	public List<CubeCueData> Cubes = new List<CubeCueData>();
 }

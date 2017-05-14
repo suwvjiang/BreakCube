@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Framework\Data\GameConst.cs" />
      <Compile Include="Assets\Scripts\Framework\Data\GameData.cs" />
      <Compile Include="Assets\Scripts\Framework\Data\GameEnum.cs" />
      <Compile Include="Assets\Scripts\Framework\Data\ModelTable.cs" />

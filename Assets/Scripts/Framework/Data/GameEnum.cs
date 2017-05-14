@@ -32,6 +32,14 @@ public enum CubeFaceType
 public enum InputState
 {
     None,
-    Mark,
-    Break,
+    Mark,//标记
+    Deletion,//删除
+    Addition,//添加
+}
+
+public enum GameStatus
+{
+    None,
+    Playing,//游戏模式
+    Editor,//编辑模型
 }

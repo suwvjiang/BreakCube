@@ -8,7 +8,6 @@ using System.Collections;
 /// </summary>
 /// 
 
-[ExecuteInEditMode]
 public class Cube : MonoBehaviour 
 {
     public Vector2 FrontPoint;
@@ -61,15 +60,7 @@ public class Cube : MonoBehaviour
             return;
         }
 
-#if UNITY_EDITOR
-        // Make a deep copy
-        Mesh meshCopy = Mesh.Instantiate(meshFilter.sharedMesh) as Mesh;    
-        meshCopy.name = "Cube";
-        // Assign the copy to the meshes
-        m_mesh = meshFilter.mesh = meshCopy;                                
-#else
         m_mesh = meshFilter.mesh;
-#endif
         if (m_mesh == null || m_mesh.uv.Length != 24) 
 		{
             Debug.LogError("Script needs to be attached to built-in cube");
@@ -87,7 +78,7 @@ public class Cube : MonoBehaviour
 #endif
     }
 
-    ///显示提示数据信息
+    //显示提示数据信息
     public void UpdataCueView()
     {
         FrontPoint.x = m_cueData.ZCue.Num;
@@ -108,7 +99,7 @@ public class Cube : MonoBehaviour
         UpdateMeshUVS();
     }
 
-    ///显示模型数据信息
+    //显示模型数据信息
     public void UpdateModelView()
     {
         MarkColor(m_modelData.Color);
@@ -127,7 +118,7 @@ public class Cube : MonoBehaviour
         }
     }
 
-    ///标记颜色
+    //标记颜色
     public void MarkColor(Color color)
     {
         if(m_color == color)
@@ -159,10 +150,10 @@ public class Cube : MonoBehaviour
         Vector2[] uvs = m_mesh.uv;
         // Front
         SetFaceTexture(CubeFaceType.Front, uvs);
-        // Top
-        SetFaceTexture(CubeFaceType.Top, uvs);
         // Back
         SetFaceTexture(CubeFaceType.Back, uvs);
+        // Top
+        SetFaceTexture(CubeFaceType.Top, uvs);
         // Bottom
         SetFaceTexture(CubeFaceType.Bottom, uvs);
         // Left
@@ -237,19 +228,19 @@ public class Cube : MonoBehaviour
         }
     }
 
-    ///更新颜色
+    //更新颜色
     protected void UpdateColor()
     {
         Debug.Log("you change this cube's color");
     }
 
-    ///方块被击碎
+    //方块被击碎
     protected virtual void BeBreak()
     {
         GameObject.Destroy(this);
     }
 
-    ///方块被误击
+    //方块被误击
     protected virtual void WrongBreak()
     {
         Debug.Log("you have mistake");
