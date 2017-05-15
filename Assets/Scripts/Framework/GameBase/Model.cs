@@ -25,7 +25,7 @@ public class CubeModel:MonoBehaviour
 
 	private ModelInfo m_info;
 	private bool m_editable = false;//可编辑
-	private List<Cube> m_cubes;
+	private List<ModelCube> m_cubes;
 
 	private Vector3 m_origin;
 	private Vector3 m_peak;
@@ -61,18 +61,18 @@ public class CubeModel:MonoBehaviour
 		if(m_info == null)
 			return;
 		
-		Cube prefab = Resources.Load<Cube>("Prefabs/Cube");
+		ModelCube prefab = Resources.Load<ModelCube>("Prefabs/ModelCube");
 		if(prefab == null)
 			return;
 
-		m_cubes = new List<Cube>();
+		m_cubes = new List<ModelCube>();
 		for(int i = 0; i < m_info.Cubes.Count; ++i)
 		{
 			CubeModelData data = m_info.Cubes[i];
 			if(data == null)
 				continue;
 			
-			Cube cube = GameObject.Instantiate<Cube>(prefab);
+			ModelCube cube = GameObject.Instantiate<ModelCube>(prefab);
 			cube.transform.parent = transform;
 			cube.transform.localPosition = data.Pos;
 			cube.ModelData = data;
@@ -81,11 +81,11 @@ public class CubeModel:MonoBehaviour
 		}
 	}
 
-	public bool AddCube(Cube target, CubeFaceType face)
+	public bool AddCube(ModelCube target, CubeFaceType face)
 	{
 		if(!m_editable)
 			return false;
-		Cube prefab = Resources.Load<Cube>("Prefabs/Cube");
+		ModelCube prefab = Resources.Load<ModelCube>("Prefabs/ModelCube");
 		if(prefab == null)
 			return false;
 
@@ -126,7 +126,7 @@ public class CubeModel:MonoBehaviour
 		data.Pos = target.ModelData.Pos + offset;
 		m_info.Cubes.Add(data);
 
-		Cube cube = GameObject.Instantiate<Cube>(prefab);
+		ModelCube cube = GameObject.Instantiate<ModelCube>(prefab);
 		cube.transform.parent = transform;
 		cube.transform.localPosition = data.Pos;
 		cube.ModelData = data;
@@ -137,21 +137,25 @@ public class CubeModel:MonoBehaviour
 	}
 
 	//删除方块
-	public void DeleteCube(Cube target)
+	public bool DeleteCube(ModelCube target)
 	{
 		if(!m_editable)
-			return;
+			return false;
 		
 		if(m_cubes.Contains(target))
 		{
+			if(m_cubes.Count == 1)
+				return false;
+
 			m_cubes.Remove(target);
 			UpdateWHD(target);
-			target.Break();
 		}
+		target.Break();
+		return true;
 	}
 
 	//更新长宽高
-	private void UpdateWHD(Cube cube)
+	private void UpdateWHD(ModelCube cube)
 	{
 		//标记原点或者顶点
 		if(cube.ModelData.Pos.x < m_origin.x)

@@ -70,7 +70,7 @@ public class InputMgr : MonoBehaviour
 			{
 				//划出射线，只有在scene视图中才能看到
 				Debug.DrawLine(ray.origin, hitInfo.point);
-				Cube target = hitInfo.collider.gameObject.GetComponent<Cube>();
+				ModelCube target = hitInfo.collider.gameObject.GetComponent<ModelCube>();
 				if(target != null)
 				{
 					Vector3 point = target.transform.InverseTransformPoint(hitInfo.point);

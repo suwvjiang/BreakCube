@@ -54,7 +54,10 @@
      <Compile Include="Assets\Scripts\Framework\Data\ModelTable.cs" />
      <Compile Include="Assets\Scripts\Framework\Data\PuzzleTable.cs" />
      <Compile Include="Assets\Scripts\Framework\GameBase\Cube.cs" />
-     <Compile Include="Assets\Scripts\Framework\GameBase\CubeModel.cs" />
+     <Compile Include="Assets\Scripts\Framework\GameBase\CueCube.cs" />
+     <Compile Include="Assets\Scripts\Framework\GameBase\Model.cs" />
+     <Compile Include="Assets\Scripts\Framework\GameBase\ModelCube.cs" />
+     <Compile Include="Assets\Scripts\Framework\GameBase\Puzzle.cs" />
      <Compile Include="Assets\Scripts\Framework\Manager\CameraMgr.cs" />
      <Compile Include="Assets\Scripts\Framework\Manager\InputMgr.cs" />
      <Compile Include="Assets\Scripts\GameEnter.cs" />

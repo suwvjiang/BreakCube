@@ -18,40 +18,11 @@ public class Cube : MonoBehaviour
     public Vector2 RightPoint;
 
     private Mesh m_mesh;
-    private CubeCueData m_cueData;
-    private CubeModelData m_modelData;
-    private bool m_marked;
     private Color m_color;
     
 
-    public CubeCueData CueData
-    {
-        get
-        {
-            return m_cueData;
-        }
-        set
-        {
-            m_cueData = value;
-            UpdataCueView();
-        }
-    }
-
-    public CubeModelData ModelData
-    {
-        get
-        {
-            return m_modelData;
-        }
-        set
-        {
-            m_modelData = value;
-            UpdateModelView();
-        }
-    }
-
     // Use this for initialization
-    void Start () 
+    protected void Start () 
 	{
         MeshFilter meshFilter = GetComponent<MeshFilter>();
         if (meshFilter == null) 
@@ -78,44 +49,10 @@ public class Cube : MonoBehaviour
 #endif
     }
 
-    //显示提示数据信息
-    public void UpdataCueView()
+    //更新方块显示
+    protected virtual void UpdateView()
     {
-        FrontPoint.x = m_cueData.ZCue.Num;
-        FrontPoint.y = (int)m_cueData.ZCue.Type;
-        BackPoint.x = m_cueData.ZCue.Num;
-        BackPoint.y = (int)m_cueData.ZCue.Type;
-
-        TopPoint.x = m_cueData.YCue.Num;
-        TopPoint.y = (int)m_cueData.YCue.Type;
-        BottomPoint.x = m_cueData.YCue.Num;
-        BottomPoint.y = (int)m_cueData.YCue.Type;
-
-        LeftPoint.x = m_cueData.XCue.Num;
-        LeftPoint.y = (int)m_cueData.XCue.Type;
-        RightPoint.x = m_cueData.XCue.Num;
-        RightPoint.y = (int)m_cueData.XCue.Type;
-
         UpdateMeshUVS();
-    }
-
-    //显示模型数据信息
-    public void UpdateModelView()
-    {
-        MarkColor(m_modelData.Color);
-    }
-
-    public void Mark()
-    {
-        m_marked = !m_marked;
-        if(m_marked)
-        {
-            MarkColor(Color.blue);
-        }
-        else
-        {
-            MarkColor(Color.white);
-        }
     }
 
     //标记颜色
@@ -128,21 +65,10 @@ public class Cube : MonoBehaviour
         UpdateColor();
     }
 
-    public bool Break()
+    public virtual bool Break()
     {
-        if(m_cueData == null)
-            return false;
-
-        if(m_cueData.Value == 0)
-        {
-            BeBreak();
-            return true;
-        }
-        else
-        {
-            WrongBreak();
-            return false;
-        }
+        GameObject.Destroy(this.gameObject);
+        return true;
     }
 
     protected void UpdateMeshUVS()
@@ -232,17 +158,5 @@ public class Cube : MonoBehaviour
     protected void UpdateColor()
     {
         Debug.Log("you change this cube's color");
-    }
-
-    //方块被击碎
-    protected virtual void BeBreak()
-    {
-        GameObject.Destroy(this);
-    }
-
-    //方块被误击
-    protected virtual void WrongBreak()
-    {
-        Debug.Log("you have mistake");
     }
 }
