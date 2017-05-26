@@ -139,24 +139,24 @@ public class Cube : MonoBehaviour
 		else if (faceType == CubeFaceType.Bottom) 
 		{
             Vector2[] newUVS = GetUVS(BottomPoint.x, BottomPoint.y);
-            uvs[12]  = newUVS[0]; 
             uvs[15] = newUVS[1]; 
+            uvs[12]  = newUVS[0]; 
             uvs[13]  = newUVS[2]; 
             uvs[14] = newUVS[3]; 
         }
 		else if (faceType == CubeFaceType.Left) 
 		{
             Vector2[] newUVS = GetUVS(LeftPoint.x, LeftPoint.y);
-            uvs[16] = newUVS[0]; 
             uvs[19]  = newUVS[1]; 
+            uvs[16] = newUVS[0]; 
             uvs[17]  = newUVS[2]; 
             uvs[18] = newUVS[3]; 
         }
 		else if (faceType == CubeFaceType.Right) 
 		{
             Vector2[] newUVS = GetUVS(RightPoint.x, RightPoint.y);
-            uvs[20] = newUVS[0]; 
             uvs[23]  = newUVS[1]; 
+            uvs[20] = newUVS[0]; 
             uvs[21]  = newUVS[2]; 
             uvs[22] = newUVS[3]; 
         }
